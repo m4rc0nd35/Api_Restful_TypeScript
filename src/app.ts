@@ -28,7 +28,8 @@ class AppControler extends UserRoutes {
 		
 		// Routers init
 		this.authRouter();
-		this.getDataRouter();
+		this.getRouter();
+		this.listRouter();
 		this.registerRouter();
 		this.updateRouter();
 		this.deleteRouter();

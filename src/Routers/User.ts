@@ -3,6 +3,8 @@
 * By M4rc0nd35 
 */
 import express, { Request, Response } from "express";
+import { body, validationResult } from 'express-validator';
+import { resolve } from "path";
 import { User } from '../Controllers/User';
 
 export class UserRoutes extends User {
@@ -14,58 +16,90 @@ export class UserRoutes extends User {
 	}
 
 	authRouter(): void {
-		// this.login("teste", "teste");
-		this.userRouter.post("/auth", (req: Request, res: Response) => {
+		this.userRouter.post("/user/auth", 
+		body('username').isString().isLength({ min: 6, max: 10 }), 
+		body('password').isString().isLength({ min: 6, max: 10 }),
+		(req: Request, res: Response) => {
 			try {
-				console.log(req.body);
-				this.loginCtl('marcondes', '321654');
-				res.status(202).send({ message: "Autenticado com sucesso!" });
-			} catch (e) {
-				res.status(501).send({ message: "try catch" });
+				const errors = validationResult(req);
+				if (!errors.isEmpty()) /* validations input´s */
+					return res.status(400).json(errors);
+					
+				this.loginCtl(req.body).then((resolve) => {
+					return res.status(202).send({ message: resolve });
+				}).catch((reject => {
+					return res.status(401).send({ message: reject });
+				}));
+			} catch (e) { /* exception */
+				return res.status(501).send({ message: e.message });
 			}
 		});
 	}
 	
-	getDataRouter(): void {
-		this.userRouter.get("/user/:id", (req: Request, res: Response) => {
+	getRouter(): void {
+		this.userRouter.get("/user/get/:idUser", (req: Request, res: Response) => {
 			console.log(req.params.id);
 			try {
 				res.status(202).send({ message: "user data" });
-			} catch (e) {
-				res.status(501).send({ message: "try catch" });
+			} catch (e) { /* exception */
+				res.status(501).send({ message: e.message });
+			}
+		});
+	}
+	
+	listRouter(): void {
+		this.userRouter.get("/list", (req: Request, res: Response) => {
+			console.log(req.params.id);
+			try {
+				res.status(202).send({ message: "user data" });
+			} catch (e) { /* exception */
+				res.status(501).send({ message: e.message });
 			}
 		});
 	}
 	
 	registerRouter(): void {
-		this.userRouter.post("/register", (req: Request, res: Response) => {
+		this.userRouter.post("/user/register", 
+		body('username').isString().isLength({ min: 6, max: 10 }),
+		body('password').isString().isLength({ min: 6, max: 10 }),
+		body('name').isString().isLength({ min: 3, max: 60 }),
+		body('email').isEmail().isLength({ min: 3, max: 60 }),
+		body('address').isString().isLength({ min: 5, max: 60 }),
+		body('phone').optional().isMobilePhone('pt-BR'),
+		(req: Request, res: Response) => {
 			try {
-				console.log(req.body);
-				res.status(202).send({ message: "Register success!" });
-			} catch (e) {
-				res.status(501).send({ message: "try catch" });
+				const errors = validationResult(req);
+				if (!errors.isEmpty()) /* validations input´s */
+					return res.status(400).json(errors);
+				
+				if(this.register(req.body)) /* send to controller write data base */
+					res.status(202).send({ message: "Register success!" });
+				else
+					res.status(406).send({ message: "Not register success!" });
+			} catch (e) { /* exception */
+				res.status(501).send({ message: "Exception /user/register"});
 			}
 		});
 	}
 	
 	updateRouter(): void {
-		this.userRouter.put("/update", (req: Request, res: Response) => {
+		this.userRouter.put("/user/update/:idUser", (req: Request, res: Response) => {
 			try {
-				console.log(req.body);
+				console.log(req.params.idUser);
 				res.status(202).send({ message: "Update success!" });
 			} catch (e) {
-				res.status(501).send({ message: "try catch" });
+				res.status(501).send({ message: e.message});
 			}
 		});
 	}
 	
 	deleteRouter(): void {
-		this.userRouter.delete("/delete", (req: Request, res: Response) => {
+		this.userRouter.delete("/user/delete/:idUser", (req: Request, res: Response) => {
 			try {
-				console.log(req.body);
+				console.log(req.params.idUser);
 				res.status(202).send({ message: "Delete success!" });
 			} catch (e) {
-				res.status(501).send({ message: "try catch" });
+				res.status(501).send({ message: e.message });
 			}
 		});
 	}
