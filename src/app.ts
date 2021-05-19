@@ -8,9 +8,6 @@ import { errorHandler } from './middleware/error.middleware';
 import { notFoundHandler } from './middleware/not-found.middleware';
 import { UserRoutes } from './Routers/User';
 import { headerConfig } from './middleware/headers'
-// import "reflect-metadata";
-import {createConnection} from "typeorm";
-
 
 class AppControler extends UserRoutes {
 	app: express.Express;
@@ -28,11 +25,9 @@ class AppControler extends UserRoutes {
 		this.routes();
 		this.errorHandler();
 		this.notFoundHandler();
-		// this.connectDB();
 
 		// Routers init
 		this.authRouter();
-		this.getRouter();
 		this.listRouter();
 		this.registerRouter();
 		this.updateRouter();
@@ -57,23 +52,6 @@ class AppControler extends UserRoutes {
 
 	routes(): void {
 		this.app.use('/', this.userRouter);
-	}
-
-	connectDB(): void {
-		createConnection({
-			type: "postgres",
-			host: "168.138.132.48",
-			port: 5432,
-			username: "postgres",
-			password: "321654dust",
-			database: "postgres",
-			entities: [
-				__dirname + "/entity/*.ts"
-			],
-			synchronize: true,
-		}).then(connection => {
-			// here you can start to work with your entities
-		}).catch(error => console.log(error));
 	}
 
 	serverOn(port: number) {

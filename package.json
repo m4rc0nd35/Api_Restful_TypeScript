@@ -1,29 +1,30 @@
 {
-  "name": "CURSO_TS",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "build": "tsc",
-    "start:dev": "ts-node-dev --respawn --pretty --transpile-only src/app.ts"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "express": "^4.17.1",
-    "express-validator": "^6.11.1",
-    "jsonwebtoken": "^8.5.1",
-    "pg": "^8.6.0",
-    "reflect-metadata": "^0.1.13",
-    "typeorm": "^0.2.32"
-  },
-  "devDependencies": {
-    "@types/express": "^4.17.11",
-    "@types/node": "^15.0.2",
-    "ts-node-dev": "^1.1.6",
-    "tsc": "^2.0.3",
-    "typescript": "^4.2.4",
-    "yarn": "^1.22.10"
-  }
+	"name": "Demo CV",
+	"version": "1.0.0",
+	"description": "",
+	"main": "app.js",
+	"scripts": {
+		"build": "tsc",
+		"start:dev": "ts-node-dev --respawn --pretty --transpile-only src/app.ts"
+	},
+	"keywords": [],
+	"author": "M4rc0nd35",
+	"license": "ISC",
+	"dependencies": {
+		"express": "^4.17.1",
+		"express-validator": "^6.11.1",
+		"jsonwebtoken": "^8.5.1",
+		"pg": "^8.6.0",
+		"reflect-metadata": "^0.1.13",
+		"typeorm": "^0.2.32"
+	},
+	"devDependencies": {
+		"@types/jsonwebtoken": "^8.5.1",
+		"@types/express": "^4.17.11",
+		"@types/node": "^15.0.2",
+		"ts-node-dev": "^1.1.6",
+		"tsc": "^2.0.3",
+		"typescript": "^4.2.4",
+		"yarn": "^1.22.10"
+	}
 }

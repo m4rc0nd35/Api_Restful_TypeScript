@@ -5,6 +5,7 @@
 import express, { Request, Response } from "express";
 import { body, validationResult } from 'express-validator';
 import { User } from '../Controllers/User';
+import Token from '../middleware/Token';
 
 export class UserRoutes extends User {
 	userRouter: express.Router;
@@ -20,45 +21,38 @@ export class UserRoutes extends User {
 			body('password').isString().isLength({ min: 6, max: 10 }),
 			(req: Request, res: Response) => {
 				try {
+					/* validations input´s */
 					const errors = validationResult(req);
-					if (!errors.isEmpty()) /* validations input´s */
+					if (!errors.isEmpty())
 						return res.status(400).json(errors);
-
+					/* Controller */
 					this.loginCtl(req.body).then((resolve) => {
-						return res.status(202).send({ message: 'Authentication success!', user: resolve });
+						return res.status(202).send({ message: 'Authentication success!', access_token: resolve });
 					}).catch((reject => {
 						return res.status(401).send({ message: reject });
 					}));
 				} catch (e) { /* exception */
-					return res.status(501).send({ message: e.message });
+					return res.status(500).send({ message: e.message });
 				}
 			});
 	}
 
-	getRouter(): void {
-		this.userRouter.get("/user/get/:idUser", (req: Request, res: Response) => {
-			console.log(req.params.id);
-			try {
-				res.status(202).send({ message: "user data" });
-			} catch (e) { /* exception */
-				res.status(501).send({ message: e.message });
-			}
-		});
-	}
-
 	listRouter(): void {
-		this.userRouter.get("/list", (req: Request, res: Response) => {
-			console.log(req.params.id);
+		this.userRouter.get("/user/list", Token.checkToken, (req: Request, res: Response) => {
 			try {
-				res.status(202).send({ message: "user data" });
+				this.listCtl().then(result => {
+					res.status(202).send({ message: "user data", data: result });
+				}).catch(error => {
+					res.status(204).send({ message: error });
+				})
 			} catch (e) { /* exception */
-				res.status(501).send({ message: e.message });
+				res.status(500).send({ message: e.message });
 			}
 		});
 	}
 
 	registerRouter(): void {
-		this.userRouter.post("/user/register",
+		this.userRouter.post("/user/register", Token.checkToken,
 			body('username').isString().isLength({ min: 6, max: 10 }),
 			body('password').isString().isLength({ min: 6, max: 10 }),
 			body('name').isString().isLength({ min: 3, max: 60 }),
@@ -67,40 +61,61 @@ export class UserRoutes extends User {
 			body('phone').optional().isMobilePhone('pt-BR'),
 			(req: Request, res: Response) => {
 				try {
+					/* validations input´s */
 					const errors = validationResult(req);
-					if (!errors.isEmpty()) /* validations input´s */
+					if (!errors.isEmpty())
 						return res.status(400).json(errors);
 
-					/* send to controller write data base */					
-					this.register(req.body).then((resolve) => {
+					/* Controller */
+					this.registerCtl(req.body).then((resolve) => {
 						res.status(202).send({ message: "Register success!" });
 					}).catch((reject => {
 						res.status(406).send({ message: reject });
 					}));
 				} catch (e) { /* exception */
-					res.status(501).send({ message: "Exception /user/register" });
+					res.status(500).send({ message: "Exception /user/register" });
 				}
 			});
 	}
 
 	updateRouter(): void {
-		this.userRouter.put("/user/update/:idUser", (req: Request, res: Response) => {
-			try {
-				console.log(req.params.idUser);
-				res.status(202).send({ message: "Update success!" });
-			} catch (e) {
-				res.status(501).send({ message: e.message });
-			}
-		});
+		this.userRouter.put("/user/update/:idUser", Token.checkToken,
+			body('username').not().isLength({ min: 6, max: 10 }),
+			body('password').optional().isString().isLength({ min: 6, max: 10 }),
+			body('name').optional().isString().isLength({ min: 3, max: 60 }),
+			body('email').optional().isEmail().isLength({ min: 3, max: 60 }),
+			body('address').optional().isString().isLength({ min: 5, max: 60 }),
+			body('phone').optional().isMobilePhone('pt-BR'),
+			(req: Request, res: Response) => {
+				try {
+					/* validations input´s */
+					const errors = validationResult(req);
+					if (!errors.isEmpty())
+						return res.status(400).json(errors);
+					/* Controller */
+					this.updateCtl(Number(req.params.idUser), req.body).then(affected => {
+						res.status(202).send({ message: "Update success!", affected: affected });
+					}).catch(error => {
+						res.status(406).send({ message: error });
+					})
+				} catch (e) {
+					res.status(500).send({ message: e.message });
+				}
+			});
 	}
 
 	deleteRouter(): void {
-		this.userRouter.delete("/user/delete/:idUser", (req: Request, res: Response) => {
+		this.userRouter.delete("/user/delete/:idUser", 
+		Token.checkToken, (req: Request, res: Response) => {
 			try {
-				console.log(req.params.idUser);
-				res.status(202).send({ message: "Delete success!" });
+				/* Controller */
+				this.deleteCtl(Number(req.params.idUser)).then(affected => {
+					res.status(202).send({ message: "Delete success!", affected: affected });
+				}).catch(error => {
+					res.status(406).send({ message: error });
+				})
 			} catch (e) {
-				res.status(501).send({ message: e.message });
+				res.status(500).send({ message: e.message });
 			}
 		});
 	}
