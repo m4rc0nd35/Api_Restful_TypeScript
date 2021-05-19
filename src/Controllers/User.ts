@@ -2,7 +2,7 @@
 * Create 2021-05-13 
 * By M4rc0nd35 
 */
-import { createConnection, getConnectionManager, Entity } from "typeorm";
+import { createConnection, getConnectionManager } from "typeorm";
 import { sign } from 'jsonwebtoken';
 import { Users } from "../entity/Users";
 
@@ -23,11 +23,6 @@ interface IUser {
 }
 
 export class User {
-
-	constructor() {
-		/* new connection database */
-		createConnection().then().catch(console.log)
-	}
 
 	loginCtl(userAuth: IUserAuth): Promise<string> {
 		return new Promise((resolve, reject) => {

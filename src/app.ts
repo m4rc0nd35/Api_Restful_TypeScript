@@ -4,12 +4,13 @@
 */
 import http from 'http';
 import express from 'express';
+import { createConnection } from "typeorm";
 import { errorHandler } from './middleware/error.middleware';
 import { notFoundHandler } from './middleware/not-found.middleware';
 import { UserRoutes } from './Routers/User';
 import { headerConfig } from './middleware/headers'
 
-class AppControler extends UserRoutes {
+class AppMain extends UserRoutes {
 	app: express.Express;
 	server: http.Server;
 
@@ -25,6 +26,11 @@ class AppControler extends UserRoutes {
 		this.routes();
 		this.errorHandler();
 		this.notFoundHandler();
+		
+		/* new connection database */
+		createConnection().then(cnn => {
+			console.log('SQL:', cnn.options);
+		}).catch(console.log)
 
 		// Routers init
 		this.authRouter();
@@ -61,5 +67,5 @@ class AppControler extends UserRoutes {
 	}
 }
 
-const instance = new AppControler();
+const instance = new AppMain();
 instance.serverOn(parseInt(process.env.PORT || '8080'));
