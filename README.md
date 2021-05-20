@@ -21,9 +21,9 @@ export SECRET_KEY=?
     "username":"eider keep",
     "password": "321654"
 }
-*** Response
+***Response
 {
     "message": "Authentication success!",
-    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NzUsIm5hbWUiOiJqZWFuIE1hcmNvbmRlcyIsImVtYWlsIjoiZWlkZXJAZGV2Y2xvdWQuY29tLmJyIiwiaWF0IjoxNjIxNDc5NDY5LCJleHAiOjE2MjE0ODAwNjl9.wKBTUYXxdilZoCR0ke0Ovmk0RfdzGga8TTeeXi-cfQM"
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 }
 ```
