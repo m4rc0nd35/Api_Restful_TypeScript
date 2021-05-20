@@ -14,9 +14,9 @@ firewall-cmd --reload
 export SECRET_KEY=?
 ```
 
-- Endpoint /user/auth
+- Endpoint POST /user/auth
 ```
->> Request POST
+>> Request
 {
     "username":"admin",
     "password": "123456"
@@ -27,7 +27,7 @@ export SECRET_KEY=?
     "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 }
 ```
-- Endpoint POST /user/register
+- Endpoint POST /user/register (Bearer token)
 ```
 >> Request
 {
@@ -43,7 +43,7 @@ export SECRET_KEY=?
     "message": "Success!"
 }
 ```
-- Endpoint POST /user/update/:idUser INT
+- Endpoint POST /user/update/:idUser INT (Bearer token)
 ```
 >> Request
 {
@@ -59,7 +59,7 @@ export SECRET_KEY=?
     "affected": 1
 }
 ```
-- Endpoint GET /user/list
+- Endpoint GET /user/list (Bearer token)
 ```
 << Response
 {
@@ -84,7 +84,7 @@ export SECRET_KEY=?
     ]
 }
 ```
-- Endpoint GET /user/delete/:idUser
+- Endpoint GET /user/delete/:idUser (Bearer token)
 ```
 << Response
 {
