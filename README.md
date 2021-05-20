@@ -14,16 +14,81 @@ firewall-cmd --reload
 export SECRET_KEY=?
 ```
 
-*** Endpoint /user/auth
+- Endpoint /user/auth
 ```
 >> Request POST
 {
-    "username":"eider keep",
-    "password": "321654"
+    "username":"admin",
+    "password": "123456"
 }
 << Response
 {
     "message": "Authentication success!",
     "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}
+```
+- Endpoint POST /user/register
+```
+>> Request
+{
+    "username": "admin",
+    "password": "123456",
+    "name": "administrator",
+    "email": "admin@admin.com.br",
+    "address": "Rua qualquer 20",
+    "phone": "84999999999"
+}
+<< Response
+{
+    "message": "Success!"
+}
+```
+- Endpoint POST /user/update/:idUser INT
+```
+>> Request
+{
+    "password": "123456", // optional
+    "name": "administrator", // optional
+    "email": "admin@admin.com.br", // optional
+    "address": "Rua qualquer 20", // optional
+    "phone": "84999999999" // optional
+}
+<< Response
+{
+    "message": "Update success!",
+    "affected": 1
+}
+```
+- Endpoint GET /user/list
+```
+<< Response
+{
+    "message": "user data",
+    "data": [
+        {
+            "id": 66,
+            "username": "admin",
+            "name": "Administrator",
+            "email": "admin@admin.com.br",
+            "address": "Rua qualquer 20",
+            "phone": "84999999999",
+            "create_at": "2021-05-18T23:51:42.064Z"
+        },
+        .
+        .
+        .
+        .
+        .
+        .
+        .
+    ]
+}
+```
+- Endpoint GET /user/delete/:idUser
+```
+<< Response
+{
+    "message": "Delete success!",
+    "affected": 1
 }
 ```
