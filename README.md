@@ -14,14 +14,14 @@ firewall-cmd --reload
 export SECRET_KEY=?
 ```
 
-### Endpoint
+*** Endpoint /user/auth
 ```
-*** Request POST
+>> Request POST
 {
     "username":"eider keep",
     "password": "321654"
 }
-***Response
+<< Response
 {
     "message": "Authentication success!",
     "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
