@@ -68,4 +68,4 @@ class AppMain extends UserRoutes {
 }
 
 const instance = new AppMain();
-instance.serverOn(parseInt(process.env.PORT || '80'));
+instance.serverOn(parseInt(process.env.PORT || '8080'));

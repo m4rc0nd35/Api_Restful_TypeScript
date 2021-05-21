@@ -3,7 +3,7 @@
 * By M4rc0nd35 
 */
 import express, { Request, Response } from "express";
-import { body, validationResult } from 'express-validator';
+import { body, param, validationResult } from 'express-validator';
 import { User } from '../Controllers/User';
 import Token from '../middleware/Token';
 
@@ -17,8 +17,8 @@ export class UserRoutes extends User {
 
 	authRouter(): void {
 		this.userRouter.post("/user/auth",
-			body('username').isString().isLength({ min: 6, max: 10 }),
-			body('password').isString().isLength({ min: 6, max: 10 }),
+			body('username').isLength({ min: 6, max: 10 }).withMessage('6~10 Digit´s'),
+			body('password').isLength({ min: 6, max: 10 }).withMessage('6~10 Digit´s'),
 			(req: Request, res: Response) => {
 				try {
 					/* validations input´s */
@@ -53,11 +53,11 @@ export class UserRoutes extends User {
 
 	registerRouter(): void {
 		this.userRouter.post("/user/register", Token.checkToken,
-			body('username').isString().isLength({ min: 6, max: 10 }),
-			body('password').isString().isLength({ min: 6, max: 10 }),
-			body('name').isString().isLength({ min: 3, max: 60 }),
+			body('username').isLength({ min: 6, max: 10 }),
+			body('password').isLength({ min: 6, max: 10 }),
+			body('name').isLength({ min: 3, max: 60 }),
 			body('email').isEmail().isLength({ min: 3, max: 60 }),
-			body('address').isString().isLength({ min: 5, max: 60 }),
+			body('address').isLength({ min: 5, max: 60 }),
 			body('phone').optional().isMobilePhone('pt-BR'),
 			(req: Request, res: Response) => {
 				try {
@@ -80,7 +80,8 @@ export class UserRoutes extends User {
 
 	updateRouter(): void {
 		this.userRouter.put("/user/update/:idUser", Token.checkToken,
-			body('username').not().isLength({ min: 6, max: 10 }),
+			param('idUser').isNumeric().withMessage('Need idUser'),
+			body('username').not(),
 			body('password').optional().isString().isLength({ min: 6, max: 10 }),
 			body('name').optional().isString().isLength({ min: 3, max: 60 }),
 			body('email').optional().isEmail().isLength({ min: 3, max: 60 }),
@@ -92,6 +93,7 @@ export class UserRoutes extends User {
 					const errors = validationResult(req);
 					if (!errors.isEmpty())
 						return res.status(400).json(errors);
+						
 					/* Controller */
 					this.updateCtl(Number(req.params.idUser), req.body).then(affected => {
 						res.status(202).send({ message: "Update success!", affected: affected });
@@ -105,9 +107,15 @@ export class UserRoutes extends User {
 	}
 
 	deleteRouter(): void {
-		this.userRouter.delete("/user/delete/:idUser", 
-		Token.checkToken, (req: Request, res: Response) => {
+		this.userRouter.delete("/user/delete/:idUser", Token.checkToken,
+		param('idUser').isNumeric().withMessage('Need idUser'),
+		(req: Request, res: Response) => {
 			try {
+				/* validations input´s */
+				const errors = validationResult(req);
+				if (!errors.isEmpty())
+					return res.status(400).json(errors);
+					
 				/* Controller */
 				this.deleteCtl(Number(req.params.idUser)).then(affected => {
 					res.status(202).send({ message: "Delete success!", affected: affected });
