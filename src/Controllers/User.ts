@@ -2,7 +2,7 @@
 * Create 2021-05-13 
 * By M4rc0nd35 
 */
-import { createConnection, getConnectionManager } from "typeorm";
+import { getConnectionManager } from "typeorm";
 import { sign } from 'jsonwebtoken';
 import { Users } from "../entity/Users";
 
@@ -26,7 +26,6 @@ export class User {
 
 	loginCtl(userAuth: IUserAuth): Promise<string> {
 		return new Promise((resolve, reject) => {
-
 			const connection = getConnectionManager().get("default");
 			/* Get Users */
 			let userAuthDB = connection.getRepository(Users);

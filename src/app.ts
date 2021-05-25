@@ -22,10 +22,8 @@ class AppMain extends UserRoutes {
 
 		// Methods init
 		this.header();
-		this.middlewares();
 		this.routes();
-		this.errorHandler();
-		this.notFoundHandler();
+		this.middlewares();
 		
 		/* new connection database */
 		createConnection().then(cnn => {
@@ -42,17 +40,11 @@ class AppMain extends UserRoutes {
 
 	header(): void {
 		this.app.use(headerConfig);
-	}
-
-	middlewares(): void {
 		this.app.use(express.json());
 	}
 
-	errorHandler(): void {
+	middlewares(): void {
 		this.app.use(errorHandler);
-	}
-
-	notFoundHandler(): void {
 		this.app.use(notFoundHandler);
 	}
 

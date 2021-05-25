@@ -24,15 +24,16 @@ export class UserRoutes extends User {
 					/* validations input´s */
 					const errors = validationResult(req);
 					if (!errors.isEmpty())
-						return res.status(400).json(errors);
+						res.status(400).json(errors);
+						
 					/* Controller */
 					this.loginCtl(req.body).then((resolve) => {
-						return res.status(202).send({ message: 'Authentication success!', access_token: resolve });
+						res.status(202).send({ message: 'Authentication success!', access_token: resolve });
 					}).catch((reject => {
-						return res.status(401).send({ message: reject });
+						res.status(401).send({ message: reject });
 					}));
 				} catch (e) { /* exception */
-					return res.status(500).send({ message: e.message });
+					res.status(500).send({ message: e.message });
 				}
 			});
 	}
@@ -80,7 +81,7 @@ export class UserRoutes extends User {
 
 	updateRouter(): void {
 		this.userRouter.put("/user/update/:idUser", Token.checkToken,
-			param('idUser').isNumeric().withMessage('Need idUser'),
+			param('idUser').isNumeric().withMessage('Need /user/update/:idUser'),
 			body('username').not(),
 			body('password').optional().isString().isLength({ min: 6, max: 10 }),
 			body('name').optional().isString().isLength({ min: 3, max: 60 }),
@@ -93,7 +94,7 @@ export class UserRoutes extends User {
 					const errors = validationResult(req);
 					if (!errors.isEmpty())
 						return res.status(400).json(errors);
-						
+
 					/* Controller */
 					this.updateCtl(Number(req.params.idUser), req.body).then(affected => {
 						res.status(202).send({ message: "Update success!", affected: affected });
@@ -108,23 +109,23 @@ export class UserRoutes extends User {
 
 	deleteRouter(): void {
 		this.userRouter.delete("/user/delete/:idUser", Token.checkToken,
-		param('idUser').isNumeric().withMessage('Need idUser'),
-		(req: Request, res: Response) => {
-			try {
-				/* validations input´s */
-				const errors = validationResult(req);
-				if (!errors.isEmpty())
-					return res.status(400).json(errors);
-					
-				/* Controller */
-				this.deleteCtl(Number(req.params.idUser)).then(affected => {
-					res.status(202).send({ message: "Delete success!", affected: affected });
-				}).catch(error => {
-					res.status(406).send({ message: error });
-				})
-			} catch (e) {
-				res.status(500).send({ message: e.message });
-			}
-		});
+			param('idUser').isNumeric().withMessage('Need /user/delete/:idUser'),
+			(req: Request, res: Response) => {
+				try {
+					/* validations input´s */
+					const errors = validationResult(req);
+					if (!errors.isEmpty())
+						return res.status(400).json(errors);
+
+					/* Controller */
+					this.deleteCtl(Number(req.params.idUser)).then(affected => {
+						res.status(202).send({ message: "Delete success!", affected: affected });
+					}).catch(error => {
+						res.status(406).send({ message: error });
+					})
+				} catch (e) {
+					res.status(500).send({ message: e.message });
+				}
+			});
 	}
 }
