@@ -22,6 +22,7 @@ class AppMain extends UserRoutes {
 
 		// Methods init
 		this.header();
+		this.app.use(headerConfig);
 		this.routes();
 		this.middlewares();
 		
@@ -39,7 +40,6 @@ class AppMain extends UserRoutes {
 	}
 
 	header(): void {
-		this.app.use(headerConfig);
 		this.app.use(express.json());
 	}
 

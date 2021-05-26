@@ -2,15 +2,20 @@
 * Create 2021-05-13 
 * By M4rc0nd35 
 */
-import { Request, Response, NextFunction } from 'express';
+import cors from 'cors';
 
-export const headerConfig = (
-	req: Request, 
-	res: Response, 
-	next: NextFunction
-) => {
-	res.header('Access-Control-Allow-Origin', '*');
-	res.header('Access-Control-Allow-Header', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-	res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, PATCH');
-	next();
-}
+const options: cors.CorsOptions = {
+		allowedHeaders: [
+		  'Origin',
+		  'X-Requested-With',
+		  'Content-Type',
+		  'Accept',
+		  'X-Access-Token',
+		],
+		credentials: false,
+		methods: 'GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE',
+		origin: "*",
+		preflightContinue: false,
+	  };
+	  
+export const headerConfig = cors(options);
