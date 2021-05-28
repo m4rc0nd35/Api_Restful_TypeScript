@@ -39,14 +39,14 @@ export class User {
 					resolve(sign({
 						id: result.id,
 						name: result.name,
-						email: result.email						
+						email: result.email
 					},
-					String(process.env.SECRET_KEY) ,{
+						String(process.env.SECRET_KEY), {
 						expiresIn: 600
 					}));
 				} else
 					reject("Unauthorized");
-					
+
 			}).catch(error => {
 				reject("Unauthorized");
 			});
@@ -54,7 +54,7 @@ export class User {
 	}
 
 	listCtl(): Promise<Users[]> {
-		return new Promise( (resolve, reject) => {
+		return new Promise((resolve, reject) => {
 			const connection = getConnectionManager().get("default");
 			/* Get repository */
 			let userListRipository = connection.getRepository(Users);

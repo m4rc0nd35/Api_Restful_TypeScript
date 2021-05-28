@@ -5,11 +5,15 @@
 apt install firewalld
 firewall-cmd --permanent --zone=public --add-port=8080/tcp
 firewall-cmd --reload
-
-
 ```
-
-- Declare you secret key
+- Enviroment ORM
+```
+export HOST_DB=?
+export USER_DB=?
+export PWD_DB=?
+export DATABASE=?
+```
+- Enviroment TOKEN KEY
 ```
 export SECRET_KEY=?
 ```

@@ -4,7 +4,7 @@
 */
 import http from 'http';
 import express from 'express';
-import { createConnection } from "typeorm";
+import { ConnectDB } from './Controllers/ConnectDB'
 import { errorHandler } from './middleware/error.middleware';
 import { notFoundHandler } from './middleware/not-found.middleware';
 import { UserRoutes } from './Routers/User';
@@ -26,10 +26,8 @@ class AppMain extends UserRoutes {
 		this.routes();
 		this.middlewares();
 		
-		/* new connection database */
-		createConnection().then(cnn => {
-			console.log('SQL:', cnn.options);
-		}).catch(console.log)
+		/* Database connection */
+		new ConnectDB();
 
 		// Routers init
 		this.authRouter();

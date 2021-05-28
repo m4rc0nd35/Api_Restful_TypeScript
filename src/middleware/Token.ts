@@ -5,15 +5,15 @@ export default class Token {
 	static tokens:  string;
 	
 	static checkToken(req: Request, res: Response, next: NextFunction): void {
-		// this.tokens = '';
 		try {
 			/* case already exists */
 			if (req.headers.authorization && process.env.SECRET_KEY) {
 				const token = req.headers.authorization.split(' ')[1];
-				const stoken = verify(token, process.env.SECRET_KEY);
+				const payload = verify(token, process.env.SECRET_KEY);
+				req.payload = payload; // add "payload?: object | string;" in req > @type > http.d.ts > class IncomingMessage
 				next();
 			} else
-				res.status(401).send({ mensagem: 'Token not exists' });
+				res.status(401).send({ mensagem: 'Token not exists or enviroment secret key' });
 
 		} catch (error) {
 			res.status(401).send(error);

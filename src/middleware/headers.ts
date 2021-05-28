@@ -5,17 +5,18 @@
 import cors from 'cors';
 
 const options: cors.CorsOptions = {
-		allowedHeaders: [
-		  'Origin',
-		  'X-Requested-With',
-		  'Content-Type',
-		  'Accept',
-		  'X-Access-Token',
-		],
-		credentials: false,
-		methods: 'GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE',
-		origin: "*",
-		preflightContinue: false,
-	  };
-	  
+	allowedHeaders: [
+		'Origin',
+		'X-Requested-With',
+		'Content-Type',
+		'Accept',
+		'X-Access-Token',
+		'Authorization'
+	],
+	credentials: false,
+	methods: 'GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE',
+	origin: "*",
+	preflightContinue: false,
+};
+
 export const headerConfig = cors(options);

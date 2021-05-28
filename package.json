@@ -1,10 +1,11 @@
 {
-	"name": "Demo CV",
+	"name": "DemoCV",
 	"version": "1.0.0",
 	"description": "",
 	"main": "app.js",
 	"scripts": {
-		"build": "tsc",
+		"build":"sudo rm -rf build/ && sudo tsc",
+		"deploy": "scp -r build/ ubuntu@168.138.146.61:/home/ubuntu/",
 		"start:dev": "ts-node-dev --respawn --pretty --transpile-only src/app.ts"
 	},
 	"keywords": [],
