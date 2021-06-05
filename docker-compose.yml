@@ -1,0 +1,18 @@
+version: "3.7"
+services: 
+  nodeapi:
+    image: m4rc0nd35/api_crud:1.0
+    container_name: "api-crud"
+    restart: always
+    command: npm start
+    ports: 
+      - "8080:8080"
+    environment: 
+      ACCESS_KEY_ID: "AKIA3AIGFP3DV4IP6M6W"
+      SECRET_ACCESS_KEY: "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"
+      REGION: "sa-east-1"
+      HOST_DB: "168.138.132.48"
+      USER_DB: "postgres"
+      PWD_DB: "321654dust"
+      DATABASE: "api_remonet"
+      SECRET_KEY: "3a2d16as5d4as5465a4s"
