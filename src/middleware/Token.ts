@@ -1,6 +1,14 @@
 import { Request, Response, NextFunction } from "express";
 import { verify } from 'jsonwebtoken';
 
+declare global {
+	namespace Express {
+		export interface Request {
+			payload: Object;
+		}
+	}
+}
+
 export default class Token {
 	static tokens:  string;
 	

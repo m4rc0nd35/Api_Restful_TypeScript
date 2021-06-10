@@ -1,5 +1,6 @@
 import { createConnection } from "typeorm";
 import { Users } from "../entity/Users";
+import { Image } from "../entity/Image";
 
 export class ConnectDB {
 
@@ -13,7 +14,8 @@ export class ConnectDB {
 			password: String(process.env.PWD_DB),
 			database: String(process.env.DATABASE),
 			entities: [
-				Users
+				Users,
+				Image
 			],
 			synchronize: true,
 			logging: false

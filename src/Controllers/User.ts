@@ -42,7 +42,7 @@ export class User {
 						email: result.email
 					},
 						String(process.env.SECRET_KEY), {
-						expiresIn: 600
+						expiresIn: 6000
 					}));
 				} else
 					reject("Unauthorized");

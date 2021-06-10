@@ -9,16 +9,20 @@ import { errorHandler } from './middleware/error.middleware';
 import { notFoundHandler } from './middleware/not-found.middleware';
 import { UserRoutes } from './Routers/User';
 import { headerConfig } from './middleware/headers'
+import { ImageRouter } from './Routers/ImageRouter';
 
-class AppMain extends UserRoutes {
+class AppMain {
 	app: express.Express;
 	server: http.Server;
+	image: ImageRouter
+	user: UserRoutes
 
 	constructor() {
-		super();
 		// Objects init
 		this.app = express();
 		this.server = http.createServer(this.app);
+		this.user = new UserRoutes();
+		this.image = new ImageRouter();
 
 		// Methods init
 		this.header();
@@ -30,11 +34,14 @@ class AppMain extends UserRoutes {
 		new ConnectDB();
 
 		// Routers init
-		this.authRouter();
-		this.listRouter();
-		this.registerRouter();
-		this.updateRouter();
-		this.deleteRouter();
+		this.user.authRouter();
+		this.user.listRouter();
+		this.user.registerRouter();
+		this.user.updateRouter();
+		this.user.deleteRouter();
+		this.image.uploadRouter();
+		this.image.deleteRouter();
+		this.image.listImagesRouter();
 	}
 
 	header(): void {
@@ -47,7 +54,8 @@ class AppMain extends UserRoutes {
 	}
 
 	routes(): void {
-		this.app.use('/', this.userRouter);
+		this.app.use('/', this.user.userRouter);
+		this.app.use('/', this.image.ImageRouter);
 	}
 
 	serverOn(port: number) {

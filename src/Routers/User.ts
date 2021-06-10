@@ -9,10 +9,14 @@ import Token from '../middleware/Token';
 
 export class UserRoutes extends User {
 	userRouter: express.Router;
+	txtNotSpace: string;
 
 	constructor() {
 		super();
 		this.userRouter = express.Router();
+
+		/* Messages validator custom */
+		this.txtNotSpace = 'Space not accept!';
 	}
 
 	authRouter(): void {
@@ -25,7 +29,7 @@ export class UserRoutes extends User {
 					const errors = validationResult(req);
 					if (!errors.isEmpty())
 						res.status(400).json(errors);
-						
+
 					/* Controller */
 					this.loginCtl(req.body).then((resolve) => {
 						res.status(202).send({ message: 'Authentication success!', access_token: resolve });
@@ -54,8 +58,8 @@ export class UserRoutes extends User {
 
 	registerRouter(): void {
 		this.userRouter.post("/user/register", Token.checkToken,
-			body('username').isLength({ min: 6, max: 10 }),
-			body('password').isLength({ min: 6, max: 10 }),
+			body('username').isLength({ min: 6, max: 10 }).not().matches(/( )/).withMessage(this.txtNotSpace),
+			body('password').isLength({ min: 6, max: 10 }).not().matches(/( )/).withMessage(this.txtNotSpace),
 			body('name').isLength({ min: 3, max: 60 }),
 			body('email').isEmail().isLength({ min: 3, max: 60 }),
 			body('address').isLength({ min: 5, max: 60 }),
@@ -83,7 +87,7 @@ export class UserRoutes extends User {
 		this.userRouter.put("/user/update/:idUser", Token.checkToken,
 			param('idUser').isNumeric().withMessage('Need /user/update/:idUser'),
 			body('username').not(),
-			body('password').optional().isString().isLength({ min: 6, max: 10 }),
+			body('password').optional().isString().isLength({ min: 6, max: 10 }).not().matches(/( )/).withMessage(this.txtNotSpace),
 			body('name').optional().isString().isLength({ min: 3, max: 60 }),
 			body('email').optional().isEmail().isLength({ min: 3, max: 60 }),
 			body('address').optional().isString().isLength({ min: 5, max: 60 }),
