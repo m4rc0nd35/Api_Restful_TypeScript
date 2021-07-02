@@ -8,6 +8,16 @@ import path from 'path';
 import Token from '../middleware/Token';
 import { ImageCtl } from '../Controllers/ImageCtl';
 
+declare global {
+	namespace Express {
+		namespace Multer {
+			interface File {
+				key: string;
+			}
+		}
+	}
+}
+
 export class ImageRouter extends ImageCtl {
 	ImageRouter: express.Router;
 	upload: multer.Multer;
@@ -16,7 +26,7 @@ export class ImageRouter extends ImageCtl {
 	constructor() {
 		super();
 		this.ImageRouter = express.Router();
-		
+
 		this.s3conn = new S3({
 			accessKeyId: process.env.ACCESS_KEY_ID,
 			secretAccessKey: process.env.SECRET_ACCESS_KEY,
@@ -28,7 +38,7 @@ export class ImageRouter extends ImageCtl {
 			storage: multerS3({
 				s3: this.s3conn,
 				bucket: String(process.env.BUCKET),
-				acl: process.env.BUCKET_ACL,				
+				acl: process.env.BUCKET_ACL,
 				key: (req, file, callback) => {
 					if (file.mimetype == 'image/jpeg')
 						callback(null, v4() + path.extname(file.originalname));
@@ -48,7 +58,7 @@ export class ImageRouter extends ImageCtl {
 					const errors = validationResult(req);
 					if (!errors.isEmpty())
 						return res.status(400).json(errors);
-
+						
 					this.insertImage(req.payload.id, String(req.file.key))
 						.then(resolve => {
 							return res.status(200).send(req.file);
