@@ -11,7 +11,7 @@ import { UserRoutes } from './Routers/User';
 import { headerConfig } from './middleware/headers'
 import { ImageRouter } from './Routers/ImageRouter';
 
-class AppMain {
+class Application {
 	app: express.Express;
 	server: http.Server;
 	image: ImageRouter
@@ -65,5 +65,5 @@ class AppMain {
 	}
 }
 
-const instance = new AppMain();
+const instance = new Application();
 instance.serverOn(parseInt(process.env.PORT || '8080'));

@@ -6,7 +6,9 @@
 	"scripts": {
 		"build": "sudo rm -rf build/ && sudo tsc",
 		"deploy": "scp -r build/ ubuntu@168.138.146.61:/home/ubuntu/",
-		"start:dev": "ts-node-dev --respawn --pretty --transpile-only src/app.ts"
+		"start:dev": "ts-node-dev --respawn --pretty --transpile-only src/app.ts",
+		"test": "ts-node-dev --respawn --pretty --transpile-only src/teste.ts",
+		"typeorm":"ts-node-dev ./node_modules/typeorm/cli.js"
 	},
 	"keywords": [],
 	"author": "M4rc0nd35",

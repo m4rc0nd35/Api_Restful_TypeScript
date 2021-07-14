@@ -14,5 +14,4 @@ export class Image {
 
     @CreateDateColumn({nullable: true})
     create_at: number;
-
 }

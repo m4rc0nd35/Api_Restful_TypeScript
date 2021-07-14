@@ -1,7 +1,7 @@
 import { getConnectionManager } from "typeorm";
 import { Image } from "../entity/Image";
 
-interface Iimage {
+interface IImage {
 	id?: number;
 	id_user?: number;
 	key_image?: string;
@@ -27,7 +27,7 @@ export class ImageCtl {
 		})
 	}
 	
-	listImages(idUser: Iimage): Promise<Iimage[]> {
+	listImages(idUser: IImage): Promise<IImage[]> {
 		return new Promise((resolve, reject) => {
 			const connection = getConnectionManager().get("default");
 			/* Get repository */
@@ -45,7 +45,7 @@ export class ImageCtl {
 		});
 	}
 	
-	deleteImages(iobj: Iimage): Promise<number> {
+	deleteImages(iobj: IImage): Promise<number> {
 		return new Promise((resolve, reject) => {
 			const connection = getConnectionManager().get("default");
 			/* Get repository */

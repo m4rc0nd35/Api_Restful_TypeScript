@@ -42,6 +42,8 @@ node_modules/
 jspm_packages/
 dist/
 build/
+start.sh
+docker-compose.yml
 # TypeScript v1 declaration files
 typings/
 

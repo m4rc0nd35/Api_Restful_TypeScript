@@ -1,11 +1,10 @@
 import { Request, Response, NextFunction } from "express";
 import { verify } from 'jsonwebtoken';
 
-
 declare global {
 	namespace Express {
 		interface Request {
-			payload: any
+			payload: object | string
 		}
 	}
 }
@@ -18,7 +17,7 @@ export default class Token {
 			/* case already exists */
 			if (req.headers.authorization && process.env.SECRET_KEY) {
 				const token = req.headers.authorization.split(' ')[1];
-				req.payload = verify(token, process.env.SECRET_KEY); // add "payload?: object | string;" in req > @type > http.d.ts > class IncomingMessage
+				req.payload = verify(token, process.env.SECRET_KEY);
 				next();
 			} else
 				res.status(401).send({ mensagem: 'Token not exists or enviroment secret key' });

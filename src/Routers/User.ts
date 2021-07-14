@@ -2,7 +2,7 @@
 * Create 2021-05-13
 * By M4rc0nd35 
 */
-import express, { Request, Response } from "express";
+import express, { Request, Response, Router } from "express";
 import { body, param, validationResult } from 'express-validator';
 import { User } from '../Controllers/User';
 import Token from '../middleware/Token';
@@ -13,7 +13,7 @@ export class UserRoutes extends User {
 
 	constructor() {
 		super();
-		this.userRouter = express.Router();
+		this.userRouter = Router();
 
 		/* Messages validator custom */
 		this.txtNotSpace = 'Space not accept!';
@@ -45,6 +45,7 @@ export class UserRoutes extends User {
 	listRouter(): void {
 		this.userRouter.get("/user/list", Token.checkToken, (req: Request, res: Response) => {
 			try {
+				/* Controller */
 				this.listCtl().then(result => {
 					res.status(202).send({ message: "user data", data: result });
 				}).catch(error => {
