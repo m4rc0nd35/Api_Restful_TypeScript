@@ -6,15 +6,16 @@
 	"scripts": {
 		"build": "sudo rm -rf build/ && sudo tsc",
 		"deploy": "scp -r build/ ubuntu@168.138.146.61:/home/ubuntu/",
-		"start:dev": "ts-node-dev --respawn --pretty --transpile-only src/app.ts",
+		"dev": "ts-node-dev --respawn --pretty --transpile-only src/app.ts",
 		"test": "ts-node-dev --respawn --pretty --transpile-only src/teste.ts",
-		"typeorm":"ts-node-dev ./node_modules/typeorm/cli.js"
+		"typeorm": "ts-node-dev ./node_modules/typeorm/cli.js"
 	},
 	"keywords": [],
 	"author": "M4rc0nd35",
 	"license": "ISC",
 	"dependencies": {
 		"aws-sdk": "^2.912.0",
+		"bcryptjs": "^2.4.3",
 		"cors": "^2.8.5",
 		"express": "^4.17.1",
 		"express-validator": "^6.11.1",
@@ -27,6 +28,7 @@
 		"uuid": "^3.3.2"
 	},
 	"devDependencies": {
+		"@types/bcryptjs": "^2.4.2",
 		"@types/cors": "^2.8.10",
 		"@types/express": "^4.17.11",
 		"@types/jsonwebtoken": "^8.5.1",

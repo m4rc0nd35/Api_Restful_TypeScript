@@ -9,54 +9,63 @@ interface IImage {
 
 export class ImageCtl {
 
-	insertImage(id_user: number, file_name: string): Promise<boolean> {
-		return new Promise((resolve, reject) => {
+	async insertImage(id_user: number, file_name: string): Promise<boolean> {
+		// return new Promise((resolve, reject) => {
+		try {
 			const connection = getConnectionManager().get("default");
 			/* Get repository */
 			let imageRegisterRipository = connection.getRepository(Image);
 
 			/* write data user */
-			imageRegisterRipository.insert({
-				id_user:id_user,
+			const img = await imageRegisterRipository.insert({
+				id_user: id_user,
 				key_image: file_name
-			}).then(result => {
-				resolve(true);
-			}).catch(error => {
-				reject(error.detail);
 			});
-		})
+
+			if (!img)
+				throw new Error(img);
+
+			return true;
+
+		} catch (error) {
+			return false;
+		}
 	}
-	
-	listImages(idUser: IImage): Promise<IImage[]> {
-		return new Promise((resolve, reject) => {
+
+	async listImages(idUser: IImage): Promise<IImage[]> {
+		try {
 			const connection = getConnectionManager().get("default");
 			/* Get repository */
 			let imageListRipository = connection.getRepository(Image);
 
 			/* get all users */
-			imageListRipository.find(idUser).then(result => {
-				if (result)
-					resolve(result);
-				else
-					reject("Not data");
-			}).catch(error => {
-				reject("Not data");
-			});
-		});
+			const img = await imageListRipository.find(idUser);
+
+			if (!img.length)
+				throw new Error("Not data!");
+
+			return img;
+
+		} catch (e) {
+			throw new Error(e.message);
+		}
+
 	}
-	
-	deleteImages(iobj: IImage): Promise<number> {
-		return new Promise((resolve, reject) => {
+
+	async deleteImages(iobj: IImage): Promise<number> {
+		try {
 			const connection = getConnectionManager().get("default");
 			/* Get repository */
 			let userRepository = connection.getRepository(Image);
 
 			/* delete data user by id */
-			userRepository.delete(iobj).then(result => {
-				resolve(Number(result.affected));
-			}).catch(error => {
-				reject(error.detail);
-			});
-		});
+			const img = await userRepository.delete(iobj);
+			if (!img.affected)
+				throw new Error("Not data!");
+				
+			return Number(img.affected);
+		} catch (e) {
+			throw new Error(e.message);
+		}
 	}
 }

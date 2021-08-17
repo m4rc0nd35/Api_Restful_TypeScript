@@ -4,9 +4,9 @@ import { Image } from "../entity/Image";
 
 export class ConnectDB {
 
-	constructor() {
+	async create(): Promise<Boolean> {
 		/* new connection database */
-		createConnection({
+		const cnn = await createConnection({
 			type: "postgres",
 			host: String(process.env.HOST_DB),
 			port: Number(process.env.PORT_DB) | 5432,
@@ -19,8 +19,13 @@ export class ConnectDB {
 			],
 			synchronize: true,
 			logging: false
-		}).then(cnn => {
-			console.log('Connection SQL:', cnn.options);
-		}).catch(console.log)
+		});
+
+		if (!cnn)
+			return false;
+
+		console.log('Connection :', cnn.options.type);
+		
+		return true;
 	}
 }

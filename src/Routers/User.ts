@@ -23,7 +23,7 @@ export class UserRoutes extends User {
 		this.userRouter.post("/user/auth",
 			body('username').isLength({ min: 6, max: 10 }).withMessage('6~10 Digit´s'),
 			body('password').isLength({ min: 6, max: 10 }).withMessage('6~10 Digit´s'),
-			(req: Request, res: Response) => {
+			async (req: Request, res: Response) => {
 				try {
 					/* validations input´s */
 					const errors = validationResult(req);
@@ -31,41 +31,38 @@ export class UserRoutes extends User {
 						res.status(400).json(errors);
 
 					/* Controller */
-					this.loginCtl(req.body).then((resolve) => {
-						res.status(202).send({ message: 'Authentication success!', access_token: resolve });
-					}).catch((reject => {
-						res.status(401).send({ message: reject });
-					}));
+					const user = await this.authUserCtl(req.body);
+					/* Response */
+					res.status(202).send({ message: 'Authentication success!', access_token: user });
+
 				} catch (e) { /* exception */
-					res.status(500).send({ message: e.message });
+					res.status(401).send({ message: e.message });
 				}
 			});
 	}
 
 	listRouter(): void {
-		this.userRouter.get("/user/list", Token.checkToken, (req: Request, res: Response) => {
+		this.userRouter.get("/user/list", Token.checkToken, async (req: Request, res: Response) => {
 			try {
 				/* Controller */
-				this.listCtl().then(result => {
-					res.status(202).send({ message: "user data", data: result });
-				}).catch(error => {
-					res.status(204).send({ message: error });
-				})
+				const users = await this.readUsersCtl();
+				res.status(202).send({ message: "user data", data: users });
+
 			} catch (e) { /* exception */
-				res.status(500).send({ message: e.message });
+				res.status(204).send({ message: e.message });
 			}
 		});
 	}
 
 	registerRouter(): void {
-		this.userRouter.post("/user/register", Token.checkToken,
+		this.userRouter.post("/user/register",
 			body('username').isLength({ min: 6, max: 10 }).not().matches(/( )/).withMessage(this.txtNotSpace),
 			body('password').isLength({ min: 6, max: 10 }).not().matches(/( )/).withMessage(this.txtNotSpace),
 			body('name').isLength({ min: 3, max: 60 }),
 			body('email').isEmail().isLength({ min: 3, max: 60 }),
 			body('address').isLength({ min: 5, max: 60 }),
 			body('phone').optional().isMobilePhone('pt-BR'),
-			(req: Request, res: Response) => {
+			async (req: Request, res: Response) => {
 				try {
 					/* validations input´s */
 					const errors = validationResult(req);
@@ -73,13 +70,12 @@ export class UserRoutes extends User {
 						return res.status(400).json(errors);
 
 					/* Controller */
-					this.registerCtl(req.body).then((resolve) => {
-						res.status(202).send({ message: "Register success!" });
-					}).catch((reject => {
-						res.status(406).send({ message: reject });
-					}));
+					const user = await this.createUserCtl(req.body);
+
+					res.status(202).send({ message: "Register success!", user});
+
 				} catch (e) { /* exception */
-					res.status(500).send({ message: "Exception /user/register" });
+					res.status(406).send({ message: e.message });
 				}
 			});
 	}
@@ -93,7 +89,7 @@ export class UserRoutes extends User {
 			body('email').optional().isEmail().isLength({ min: 3, max: 60 }),
 			body('address').optional().isString().isLength({ min: 5, max: 60 }),
 			body('phone').optional().isMobilePhone('pt-BR'),
-			(req: Request, res: Response) => {
+			async (req: Request, res: Response) => {
 				try {
 					/* validations input´s */
 					const errors = validationResult(req);
@@ -101,13 +97,12 @@ export class UserRoutes extends User {
 						return res.status(400).json(errors);
 
 					/* Controller */
-					this.updateCtl(Number(req.params.idUser), req.body).then(affected => {
-						res.status(202).send({ message: "Update success!", affected: affected });
-					}).catch(error => {
-						res.status(406).send({ message: error });
-					})
+					const affected = await this.updateUserCtl(Number(req.params.idUser), req.body)
+
+					res.status(202).send({ message: "Update success!", affected });
+
 				} catch (e) {
-					res.status(500).send({ message: e.message });
+					res.status(406).send({ message: e.message });
 				}
 			});
 	}
@@ -115,7 +110,7 @@ export class UserRoutes extends User {
 	deleteRouter(): void {
 		this.userRouter.delete("/user/delete/:idUser", Token.checkToken,
 			param('idUser').isNumeric().withMessage('Need /user/delete/:idUser'),
-			(req: Request, res: Response) => {
+			async (req: Request, res: Response) => {
 				try {
 					/* validations input´s */
 					const errors = validationResult(req);
@@ -123,13 +118,11 @@ export class UserRoutes extends User {
 						return res.status(400).json(errors);
 
 					/* Controller */
-					this.deleteCtl(Number(req.params.idUser)).then(affected => {
-						res.status(202).send({ message: "Delete success!", affected: affected });
-					}).catch(error => {
-						res.status(406).send({ message: error });
-					})
+					const affected = await this.deleteUserCtl(Number(req.params.idUser));
+					res.status(202).send({ message: "Delete success!", affected });
+
 				} catch (e) {
-					res.status(500).send({ message: e.message });
+					res.status(406).send({ message: e.message });
 				}
 			});
 	}

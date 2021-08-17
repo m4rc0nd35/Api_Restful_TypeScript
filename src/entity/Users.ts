@@ -1,29 +1,29 @@
-import {Entity, PrimaryGeneratedColumn, Column, CreateDateColumn} from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from "typeorm";
 
 @Entity()
 export class Users {
 
-    @PrimaryGeneratedColumn({ type: "int4", zerofill: true, unsigned: true})
-    id: number;
+	@PrimaryGeneratedColumn({ type: "int4", zerofill: true, unsigned: true })
+	id: number;
 
-    @Column("varchar", { length: 10, unique: true })
-    username: string;
+	@Column("varchar", { length: 10, unique: true })
+	username: string;
 
-    @Column("varchar", { length: 10, select: false })
-    password: string;
+	@Column("varchar", { length: 60 })
+	password?: string;
 
-	@Column("varchar", {length: 60 })
+	@Column("varchar", { length: 60 })
 	name: string;
-	
-	@Column("varchar", {length: 60, unique: true })
+
+	@Column("varchar", { length: 60, unique: true })
 	email: string;
-	
-	@Column("varchar", {length: 60 })
+
+	@Column("varchar", { length: 60 })
 	address: string;
-	
-	@Column("varchar", {length: 11, unique: true })
+
+	@Column("varchar", { length: 11, unique: true })
 	phone: number;
-	
-	@CreateDateColumn({nullable: true})
-    create_at: number;
+
+	@CreateDateColumn({ nullable: true })
+	create_at: number;
 }

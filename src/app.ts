@@ -4,11 +4,11 @@
 */
 import http from 'http';
 import express from 'express';
-import { ConnectDB } from './Controllers/ConnectDB'
+import { ConnectDB } from './Controllers/ConnectDB';
 import { errorHandler } from './middleware/error.middleware';
 import { notFoundHandler } from './middleware/not-found.middleware';
 import { UserRoutes } from './Routers/User';
-import { headerConfig } from './middleware/headers'
+import { headerConfig } from './middleware/headers';
 import { ImageRouter } from './Routers/ImageRouter';
 
 class Application {
@@ -31,7 +31,7 @@ class Application {
 		this.middlewares();
 		
 		/* Database connection */
-		new ConnectDB();
+		new ConnectDB().create();
 
 		// Routers init
 		this.user.authRouter();
