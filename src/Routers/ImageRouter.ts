@@ -9,9 +9,9 @@ import Token from '../middleware/Token';
 import { ImageCtl } from '../Controllers/ImageCtl';
 
 declare global {
-	namespace Express {
-		namespace Multer {
-			interface File {
+    namespace Express {
+        namespace Multer {
+            interface File {
 				key: string;
 			}
 		}
@@ -62,7 +62,7 @@ export class ImageRouter extends ImageCtl {
 					/* insert database */
 					const img = await this.insertImage(
 						Number(req.payload.id),
-						String(req.file.key)
+						String(req.file?.key)
 					);
 
 					res.status(200).send(req.file);

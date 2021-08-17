@@ -36,7 +36,7 @@ export class User {
 		if (!userFind)
 			throw new Error("Email/Password incorrect!");
 
-		const userMatch = await compare(password, userFind.password || "");
+		const userMatch = await compare(password, userFind.password || "adjhasbd7&&7%4¨%46");
 		if (!userMatch)
 			throw new Error("Email/Password incorrect!");
 
