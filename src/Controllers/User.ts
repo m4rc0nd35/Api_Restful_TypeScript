@@ -1,120 +1,93 @@
 /* 
-* Create 2021-05-13 
+* Create 2021-05-13
 * By M4rc0nd35 
 */
-import { getConnectionManager } from "typeorm";
-import { sign } from 'jsonwebtoken';
-import { Users } from "../entity/Users";
-import { compare, hash } from "bcryptjs";
+import { Request, Response } from "express";
+import { validationResult } from 'express-validator';
+import { UserService } from '../Services/User';
 
-interface IUserAuth {
-	username: string;
-	password: string;
-	name: string;
-	token: string;
-}
+export class UserControlle {
 
-interface IUser {
-	username: string;
-	password: string;
-	name: string;
-	email: string;
-	address: string;
-	phone?: number;
-}
+	async authUserCtl(req: Request, res: Response): Promise<void> {
+		try {
+			/* validations input´s */
+			const errors = validationResult(req);
+			if (!errors.isEmpty())
+				res.status(400).json(errors);
 
-export class User {
+			/* Controller */
+			const userSrv = new UserService();
+			const user = await userSrv.authUserService(req.body);
+			/* Response */
+			res.status(202).send({ message: 'Authentication success!', access_token: user });
 
-	async authUserCtl({ username, password }: IUserAuth): Promise<string> {
-		const connection = getConnectionManager().get("default");
-		/* Get Users */
-		let userAuthDB = connection.getRepository(Users);
-
-		/* search data user on DB */
-		const userFind = await userAuthDB.findOne({ username });
-		console.log(userFind);
-		if (!userFind)
-			throw new Error("Email/Password incorrect!");
-
-		const userMatch = await compare(password, userFind.password || "adjhasbd7&&7%4¨%46");
-		if (!userMatch)
-			throw new Error("Email/Password incorrect!");
-
-		/* create new token */
-		return sign({
-			id: userFind.id,
-			name: userFind.name,
-			email: userFind.email
-		},
-			String(process.env.SECRET_KEY), {
-			expiresIn: 60000
-		});
+		} catch (e) { /* exception */
+			res.status(401).send({ message: e.message });
+		}
 	}
 
-	async readUsersCtl(): Promise<Users[]> {
-		// return new Promise((resolve, reject) => {
-		const connection = getConnectionManager().get("default");
-		/* Get repository */
-		let userListRipository = connection.getRepository(Users);
+	async readUserCtl(req: Request, res: Response): Promise<void> {
+		try {
+			/* Controller */
+			const userSrv = new UserService();
+			const users = await userSrv.readUsersService();
+			res.status(202).send({ message: "user data", data: users });
 
-		/* get all users */
-		const readUser = await userListRipository.find();//.then(result => {
-		for (const user of readUser)
-			delete user.password;
-
-		if (!readUser)
-			throw new Error("Not data!");
-
-		return readUser;
+		} catch (e) { /* exception */
+			res.status(204).send({ message: "e.message" });
+		}
 	}
 
-	async createUserCtl(dataUser: IUser): Promise<Object> {
-		const connection = getConnectionManager().get("default");
-		/* Get repository */
-		let userRegisterRipository = connection.getRepository(Users);
+	async createUserCtl(req: Request, res: Response): Promise<void> {
+		try {
+			/* validations input´s */
+			const errors = validationResult(req);
+			if (!errors.isEmpty())
+				res.status(400).json(errors);
 
-		const pwdHash = await hash(dataUser.password, 8);
+			/* Controller */
+			const userSrv = new UserService();
+			const user = await userSrv.createUserService(req.body);
 
-		/* write data user */
-		const user = await userRegisterRipository.insert({
-			username: dataUser.username,
-			password: pwdHash,
-			name: dataUser.name,
-			email: dataUser.email,
-			address: dataUser.address,
-			phone: Number(dataUser.phone)
-		});
+			res.status(202).send({ message: "Register success!", user });
 
-		delete user.generatedMaps[0].password;
-
-		return user.generatedMaps[0];
+		} catch (e) { /* exception */
+			res.status(406).send({ message: e.message });
+		}
 	}
 
-	async updateUserCtl(id: number, userData: IUser): Promise<number> {
-		const connection = getConnectionManager().get("default");
-		/* Get repository */
-		let userUpdateRipository = connection.getRepository(Users);
+	async updateUserCtl(req: Request, res: Response): Promise<void> {
+		try {
+			/* validations input´s */
+			const errors = validationResult(req);
+			if (!errors.isEmpty())
+				res.status(400).json(errors);
 
-		/* update data user by id */
-		const user = await userUpdateRipository.update(id, userData);
+			/* Controller */
+			const userSrv = new UserService();
+			const affected = await userSrv.updateUserService(Number(req.params.idUser), req.body)
 
-		if (!user.affected)
-			throw new Error("Not update");
+			res.status(202).send({ message: "Update success!", affected });
 
-		return Number(user.affected)
+		} catch (e) {
+			res.status(406).send({ message: e.message });
+		}
 	}
 
-	async deleteUserCtl(id: number): Promise<number> {
-		const connection = getConnectionManager().get("default");
-		/* Get repository */
-		let userRepository = connection.getRepository(Users);
+	async deleteUserCtl(req: Request, res: Response): Promise<void> {
+		try {
+			/* validations input´s */
+			const errors = validationResult(req);
+			if (!errors.isEmpty())
+				res.status(400).json(errors);
 
-		/* delete data user by id */
-		const user = await userRepository.delete(id);
+			/* Controller */
+			const userSrv = new UserService();
+			const affected = await userSrv.deleteUserService(Number(req.params.idUser));
+			res.status(202).send({ message: "Delete success!", affected });
 
-		if (!user.affected)
-			throw new Error("Not deleted");
-
-		return Number(user.affected);
+		} catch (e) {
+			res.status(406).send({ message: e.message });
+		}
 	}
 }

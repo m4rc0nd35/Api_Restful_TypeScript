@@ -9,7 +9,7 @@ import { errorHandler } from './middleware/error.middleware';
 import { notFoundHandler } from './middleware/not-found.middleware';
 import { UserRoutes } from './Routers/User';
 import { headerConfig } from './middleware/headers';
-import { ImageRouter } from './Routers/ImageRouter';
+import { ImageRouter } from './Services/ImageRouter';
 
 class Application {
 	app: express.Express;
@@ -34,11 +34,11 @@ class Application {
 		new ConnectDB().create();
 
 		// Routers init
-		this.user.authRouter();
-		this.user.listRouter();
-		this.user.registerRouter();
-		this.user.updateRouter();
-		this.user.deleteRouter();
+		this.user.authUserRoute();
+		this.user.readUserRoute();
+		this.user.createUserRoute();
+		this.user.updateUserRoute();
+		this.user.deleteUserRoute();
 		this.image.uploadRouter();
 		this.image.deleteRouter();
 		this.image.listImagesRouter();
