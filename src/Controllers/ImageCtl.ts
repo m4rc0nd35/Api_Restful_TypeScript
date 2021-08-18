@@ -1,3 +1,7 @@
+/* 
+* Created 2021-05-13
+* By M4rc0nd35 
+*/
 import { getConnectionManager } from "typeorm";
 import { Image } from "../entity/Image";
 

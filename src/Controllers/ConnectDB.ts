@@ -1,3 +1,7 @@
+/* 
+* Created 2021-05-13
+* By M4rc0nd35 
+*/
 import { createConnection } from "typeorm";
 import { Users } from "../entity/Users";
 import { Image } from "../entity/Image";

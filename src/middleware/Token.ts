@@ -1,3 +1,7 @@
+/* 
+* Created 2021-05-13
+* By M4rc0nd35 
+*/
 import { Request, Response, NextFunction } from "express";
 import { verify } from 'jsonwebtoken';
 
