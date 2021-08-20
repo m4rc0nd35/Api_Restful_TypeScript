@@ -14,8 +14,8 @@ import { ImageRouter } from './Services/ImageRouter';
 class Application {
 	app: express.Express;
 	server: http.Server;
-	image: ImageRouter
-	user: UserRoutes
+	image: ImageRouter;
+	user: UserRoutes;
 
 	constructor() {
 		// Objects init

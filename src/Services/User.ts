@@ -24,7 +24,7 @@ interface IUser {
 }
 
 export class UserService {
-
+	
 	async authUserService({ username, password }: IUserAuth): Promise<string> {
 		console.log("authUserService")
 		const connection = getConnectionManager().get("default");
@@ -33,7 +33,7 @@ export class UserService {
 
 		/* search data user on DB */
 		const userFind = await userAuthDB.findOne({ username });
-		
+
 		if (!userFind)
 			throw new Error("Email/Password incorrect!");
 
@@ -69,21 +69,22 @@ export class UserService {
 		return readUser;
 	}
 
-	async createUserService(dataUser: IUser): Promise<Object> {
+	async createUserService({ username, password, name, email, address, phone }: IUser): Promise<Object> {
 		const connection = getConnectionManager().get("default");
 		/* Get repository */
 		let userRegisterRipository = connection.getRepository(Users);
 
-		const pwdHash = await hash(dataUser.password, 8);
+		const pwdHash = await hash(password, 8);
 
 		/* write data user */
+		
 		const user = await userRegisterRipository.insert({
-			username: dataUser.username,
+			username,
 			password: pwdHash,
-			name: dataUser.name,
-			email: dataUser.email,
-			address: dataUser.address,
-			phone: Number(dataUser.phone)
+			name,
+			email,
+			address,
+			phone
 		});
 
 		delete user.generatedMaps[0].password;

@@ -6,7 +6,15 @@ import { Request, Response } from "express";
 import { validationResult } from 'express-validator';
 import { UserService } from '../Services/User';
 
-export class UserControlle {
+interface IFuncUser {
+	authUserCtl(req: Request, res: Response): Promise<void>;
+	readUserCtl(req: Request, res: Response): Promise<void>;
+	createUserCtl(req: Request, res: Response): Promise<void>;
+	updateUserCtl(req: Request, res: Response): Promise<void>;
+	deleteUserCtl(req: Request, res: Response): Promise<void>;
+}
+
+export class UserControlle implements IFuncUser {
 
 	async authUserCtl(req: Request, res: Response): Promise<void> {
 		try {
@@ -16,8 +24,7 @@ export class UserControlle {
 				res.status(400).json(errors);
 
 			/* Controller */
-			const userSrv = new UserService();
-			const user = await userSrv.authUserService(req.body);
+			const user = await new UserService().authUserService(req.body);
 			/* Response */
 			res.status(202).send({ message: 'Authentication success!', access_token: user });
 
@@ -29,8 +36,7 @@ export class UserControlle {
 	async readUserCtl(req: Request, res: Response): Promise<void> {
 		try {
 			/* Controller */
-			const userSrv = new UserService();
-			const users = await userSrv.readUsersService();
+			const users = await new UserService().readUsersService();
 			res.status(202).send({ message: "user data", data: users });
 
 		} catch (e) { /* exception */
@@ -46,8 +52,7 @@ export class UserControlle {
 				res.status(400).json(errors);
 
 			/* Controller */
-			const userSrv = new UserService();
-			const user = await userSrv.createUserService(req.body);
+			const user = await new UserService().createUserService(req.body);
 
 			res.status(202).send({ message: "Register success!", user });
 
@@ -64,8 +69,7 @@ export class UserControlle {
 				res.status(400).json(errors);
 
 			/* Controller */
-			const userSrv = new UserService();
-			const affected = await userSrv.updateUserService(Number(req.params.idUser), req.body)
+			const affected = await new UserService().updateUserService(Number(req.params.idUser), req.body)
 
 			res.status(202).send({ message: "Update success!", affected });
 
@@ -82,8 +86,7 @@ export class UserControlle {
 				res.status(400).json(errors);
 
 			/* Controller */
-			const userSrv = new UserService();
-			const affected = await userSrv.deleteUserService(Number(req.params.idUser));
+			const affected = await new UserService().deleteUserService(Number(req.params.idUser));
 			res.status(202).send({ message: "Delete success!", affected });
 
 		} catch (e) {
