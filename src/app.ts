@@ -4,14 +4,13 @@
 */
 import http from 'http';
 import express from 'express';
-import { ConnectDB } from './Controllers/ConnectDB';
 import { errorHandler } from './middleware/error.middleware';
 import { notFoundHandler } from './middleware/not-found.middleware';
 import { UserRoutes } from './Routers/User';
 import { headerConfig } from './middleware/headers';
 import { ImageRouter } from './Services/ImageRouter';
 
-class Application {
+export class Application {
 	app: express.Express;
 	server: http.Server;
 	image: ImageRouter;
@@ -28,10 +27,7 @@ class Application {
 		this.header();
 		this.app.use(headerConfig);
 		this.routes();
-		this.middlewares();
-		
-		/* Database connection */
-		new ConnectDB().create();
+		this.middlewares();		
 
 		// Routers init
 		this.user.authUserRoute();
@@ -64,6 +60,3 @@ class Application {
 		});
 	}
 }
-
-const instance = new Application();
-instance.serverOn(parseInt(process.env.PORT || '8080'));

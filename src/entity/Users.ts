@@ -25,5 +25,5 @@ export class Users {
 	phone: number;
 
 	@CreateDateColumn({ nullable: true })
-	create_at: number;
+	created_at: number;
 }

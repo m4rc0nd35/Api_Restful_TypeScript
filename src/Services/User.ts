@@ -26,7 +26,6 @@ interface IUser {
 export class UserService {
 	
 	async authUserService({ username, password }: IUserAuth): Promise<string> {
-		console.log("authUserService")
 		const connection = getConnectionManager().get("default");
 		/* Get Users */
 		let userAuthDB = connection.getRepository(Users);

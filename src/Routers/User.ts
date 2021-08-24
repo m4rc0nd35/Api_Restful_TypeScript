@@ -34,8 +34,8 @@ export class UserRoutes {
 		);
 	}
 
-	createUserRoute(): void {
-		this.userRouter.post("/user/register",
+	createUserRoute() {
+		return this.userRouter.post("/user/register",
 			body('username').isLength({ min: 6, max: 10 }).not().matches(/( )/).withMessage(this.txtNotSpace),
 			body('password').isLength({ min: 6, max: 10 }).not().matches(/( )/).withMessage(this.txtNotSpace),
 			body('name').isLength({ min: 3, max: 60 }),

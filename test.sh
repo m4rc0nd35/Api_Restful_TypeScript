@@ -1,0 +1,12 @@
+export HOST_DB='168.138.132.48'
+export USER_DB=postgres
+export PWD_DB=321654dust
+export DATABASE=api_remonet
+export SECRET_KEY=3a2d16as5d4as5465a4s
+export LIMIT_FILE_SIZE=512000
+export ACCESS_KEY_ID=AKIAVRH46R4GKXE44IPF
+export SECRET_ACCESS_KEY=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
+export REGION=sa-east-1
+export BUCKET=devcloud-images
+export BUCKET_ACL=public-read
+yarn test
