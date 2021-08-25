@@ -7,10 +7,13 @@ import { Image } from "../src/entity/Image";
 
 describe("Integretion test user", () => {
 	let init = false;
-	let token: string;
+	let access_token: string;
 	let txtNotSpace = 'Space not accept!';
 	let instance: Application;
-	
+
+	let username = 'testuser';
+	let password = '123456';
+
 	beforeEach(async () => {
 		if (!init) {
 			const cnn = await createConnection({
@@ -27,24 +30,24 @@ describe("Integretion test user", () => {
 				synchronize: true,
 				logging: false
 			});
-	
+
 			if (!cnn)
 				return false;
-	
+
 			console.log('Connection :', cnn.options.type);
-			
+
 			instance = new Application();
 			init = true;
 		}
 	});
 
-	it("Deve criar um usuário", async () => {
+	it("Should create user!", async () => {
 		const result = await request(instance.app)
 			.post("/user/register")
 			.set('Accept', 'application/json')
 			.send({
-				username: "marcosss",
-				password: "123456",
+				username,
+				password,
 				name: "Jean Marcondes",
 				email: "dev1@devcloud.com.br",
 				address: "Rua X Parnamirim/RN",
@@ -55,5 +58,30 @@ describe("Integretion test user", () => {
 
 		expect(result.body.user).toHaveProperty("id");
 		expect(result.body.user).toHaveProperty("created_at");
+	});
+
+	it("Should authenticate user!", async () => {
+		const result = await request(instance.app)
+			.post("/user/auth")
+			.set('Accept', 'application/json')
+			.send({
+				username,
+				password
+			})
+			.expect('Content-Type', /json/)
+			.expect(202);
+		access_token = result.body.access_token;
+
+		expect(result.body.message).toEqual("Authentication success!");
+		expect(result.body).toHaveProperty("access_token");
+	});
+
+	it("Should read user!", async () => {
+		const result = await request(instance.app)
+			.get("/user/list")
+			.set('authorization', 'Bearer ' + access_token)
+			.set('Accept', 'application/json')
+			.expect('Content-Type', /json/)
+			.expect(202);
 	});
 });
