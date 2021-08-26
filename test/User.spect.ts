@@ -5,11 +5,12 @@ import { createConnection } from "typeorm";
 import { Users } from "../src/entity/Users";
 import { Image } from "../src/entity/Image";
 
-describe("Integretion test user", () => {
+describe("Integration test user", () => {
 	let init = false;
 	let access_token: string;
 	let txtNotSpace = 'Space not accept!';
 	let instance: Application;
+	let userId: Number;
 
 	let username = 'testuser';
 	let password = '123456';
@@ -48,10 +49,10 @@ describe("Integretion test user", () => {
 			.send({
 				username,
 				password,
-				name: "Jean Marcondes",
-				email: "dev1@devcloud.com.br",
-				address: "Rua X Parnamirim/RN",
-				phone: "84988984868"
+				name: "Teste da silva",
+				email: "dev@devcloud.com.br",
+				address: "Rua X city/RN",
+				phone: "84999999999"
 			})
 			.expect('Content-Type', /json/)
 			.expect(202);
@@ -79,9 +80,25 @@ describe("Integretion test user", () => {
 	it("Should read user!", async () => {
 		const result = await request(instance.app)
 			.get("/user/list")
-			.set('authorization', 'Bearer ' + access_token)
+			.auth(access_token, { type: "bearer" })
 			.set('Accept', 'application/json')
 			.expect('Content-Type', /json/)
 			.expect(202);
+
+		userId = result.body.data[0].id;
+		expect(result.body.data[0].username).toEqual(username);
+	});
+
+	it("Should update user account!", async () => {
+		const result = await request(instance.app)
+		.put("/user/update/"+userId)
+		.auth(access_token, { type: "bearer" })
+		.send({
+			password: "321654",
+			name: "joão melão"
+		})
+		.expect(202);
+		
+		expect(result.body.affected).toEqual(1);
 	});
 });
