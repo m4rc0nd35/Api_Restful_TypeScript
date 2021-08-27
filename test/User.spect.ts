@@ -83,12 +83,44 @@ describe("Integration test user", () => {
 			.auth(access_token, { type: "bearer" })
 			.set('Accept', 'application/json')
 			.expect('Content-Type', /json/)
-			.expect(202);
+			.expect(200);
 
 		userId = result.body.data[0].id;
 		expect(result.body.data[0].username).toEqual(username);
 	});
 
+	it("Shouldn´t update user account, without userid param!", async () => {
+		const result = await request(instance.app)
+		.put("/user/update/")
+		.auth(access_token, { type: "bearer" })
+		.send({
+			password: "321654",
+			name: "joão melão"
+		})
+		.expect(404);
+	});
+	
+	it("Shouldn´t update user account, userid not exists on database!", async () => {
+		const result = await request(instance.app)
+		.put("/user/update/1")
+		.auth(access_token, { type: "bearer" })
+		.send({
+			password: "321654",
+			name: "joão melão"
+		})
+		.expect(406);
+	});
+	
+	it("Shouldn´t update user account, without access token!", async () => {
+		const result = await request(instance.app)
+		.put("/user/update/1")
+		.send({
+			password: "321654",
+			name: "joão melão"
+		})
+		.expect(401);
+	});
+	
 	it("Should update user account!", async () => {
 		const result = await request(instance.app)
 		.put("/user/update/"+userId)
@@ -97,6 +129,35 @@ describe("Integration test user", () => {
 			password: "321654",
 			name: "joão melão"
 		})
+		.expect(202);
+		
+		expect(result.body.affected).toEqual(1);
+	});
+	
+	it("Shouldn´t delete user, without access token!", async () =>{
+		const result = await request(instance.app)
+		.delete("/user/delete/1")
+		.expect(401);
+	});
+	
+	it("Shouldn´t delete user, without userid param!", async () =>{
+		const result = await request(instance.app)
+		.delete("/user/delete/")
+		.auth(access_token, { type: "bearer"})
+		.expect(404);
+	});
+	
+	it("Shouldn´t delete user, userid not exists on database!", async () =>{
+		const result = await request(instance.app)
+		.delete("/user/delete/1")
+		.auth(access_token, { type: "bearer"})
+		.expect(406);
+	});
+	
+	it("Should delete user!", async () =>{
+		const result = await request(instance.app)
+		.delete("/user/delete/"+userId)
+		.auth(access_token, { type: "bearer"})
 		.expect(202);
 		
 		expect(result.body.affected).toEqual(1);

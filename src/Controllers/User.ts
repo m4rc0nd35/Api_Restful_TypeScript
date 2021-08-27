@@ -37,7 +37,7 @@ export class UserControlle implements IFuncUser {
 		try {
 			/* Controller */
 			const users = await new UserService().readUsersService();
-			res.status(202).send({ message: "user data", data: users });
+			res.status(200).send({ message: "user data", data: users });
 
 		} catch (e) { /* exception */
 			res.status(204).send({ message: "e.message" });
