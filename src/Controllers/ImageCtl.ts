@@ -51,7 +51,7 @@ export class ImageCtl {
 			return img;
 
 		} catch (e) {
-			throw new Error(e.message);
+			throw new Error((e as Error).message);
 		}
 
 	}
@@ -69,7 +69,7 @@ export class ImageCtl {
 				
 			return Number(img.affected);
 		} catch (e) {
-			throw new Error(e.message);
+			throw new Error((e as Error).message);
 		}
 	}
 }

@@ -9,17 +9,13 @@ import Token from '../middleware/Token';
 import { ImageCtl } from '../Controllers/ImageCtl';
 
 declare global {
-    namespace Express {
-        namespace Multer {
-            interface File {
+	namespace Express {
+		namespace Multer {
+			interface File {
 				key: string;
 			}
 		}
 	}
-}
-
-type ErrorCatch = {
-	message: string;
 }
 
 export class ImageRouter extends ImageCtl {
@@ -71,8 +67,8 @@ export class ImageRouter extends ImageCtl {
 
 					res.status(200).send(req.file);
 
-				} catch (e: any) { /* exception */
-					return res.status(403).send({ message: e.message });
+				} catch (e) { /* exception */
+					return res.status(403).send({ message: (e as Error).message });
 				}
 			});
 	}
@@ -90,8 +86,8 @@ export class ImageRouter extends ImageCtl {
 					const img = await this.listImages({ id_user: Number(req.params.idUser) });
 					res.status(200).send(img);
 
-				} catch (e: any) {
-					res.status(406).send({ message: e.message });
+				} catch (e) {
+					res.status(406).send({ message: (e as Error).message });
 				}
 			});
 	}
@@ -127,8 +123,8 @@ export class ImageRouter extends ImageCtl {
 						res.status(200).send({ affected, aws: data });
 					});
 
-				} catch (e: any) { /* exception */
-					return res.status(406).send({ message: e.message });
+				} catch (e) { /* exception */
+					return res.status(406).send({ message: (e as Error).message });
 				}
 			});
 	}

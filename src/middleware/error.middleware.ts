@@ -6,12 +6,12 @@ import HttpException from '../Common/http-exceptio';
 import { Request, Response, NextFunction } from 'express';
 
 export const errorHandler = (
-  error: HttpException,
-  request: Request,
-  response: Response,
-  next: NextFunction
+	error: HttpException,
+	request: Request,
+	response: Response,
+	next: NextFunction
 ) => {
-  const status = error.statusCode || error.status || 500;
+	const status = error.statusCode || error.status || 500;
 
-  response.status(status).send({message:error.message});
+	response.status(status).send({ message: error });
 };

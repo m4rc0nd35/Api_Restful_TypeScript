@@ -34,11 +34,11 @@ export class UserService {
 		const userFind = await userAuthDB.findOne({ username });
 
 		if (!userFind)
-			throw new Error("Email/Password incorrect!");
+			throw new Error("Username/Password incorrect!");
 
 		const userMatch = await compare(password, userFind.password || "adjhasbd7&&7%4¨%46");
 		if (!userMatch)
-			throw new Error("Email/Password incorrect!");
+			throw new Error("Username/Password incorrect!");
 
 		/* create new token */
 		return sign({

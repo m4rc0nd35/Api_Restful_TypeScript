@@ -29,7 +29,7 @@ export class UserControlle implements IFuncUser {
 			res.status(202).send({ message: 'Authentication success!', access_token: user });
 
 		} catch (e) { /* exception */
-			res.status(401).send({ message: e.message });
+			res.status(401).send({ message: (e as Error).message });
 		}
 	}
 
@@ -40,7 +40,7 @@ export class UserControlle implements IFuncUser {
 			res.status(200).send({ message: "user data", data: users });
 
 		} catch (e) { /* exception */
-			res.status(204).send({ message: "e.message" });
+			res.status(204).send({ message: (e as Error).message });
 		}
 	}
 
@@ -57,7 +57,7 @@ export class UserControlle implements IFuncUser {
 			res.status(202).send({ message: "Register success!", user });
 
 		} catch (e) { /* exception */
-			res.status(406).send({ message: e.message });
+			res.status(406).send({ message: (e as Error).message });
 		}
 	}
 
@@ -74,7 +74,7 @@ export class UserControlle implements IFuncUser {
 			res.status(202).send({ message: "Update success!", affected });
 
 		} catch (e) {
-			res.status(406).send({ message: e.message });
+			res.status(406).send({ message: (e as Error).message });
 		}
 	}
 
@@ -90,7 +90,7 @@ export class UserControlle implements IFuncUser {
 			res.status(202).send({ message: "Delete success!", affected });
 
 		} catch (e) {
-			res.status(406).send({ message: e.message });
+			res.status(406).send({ message: (e as Error).message });
 		}
 	}
 }
