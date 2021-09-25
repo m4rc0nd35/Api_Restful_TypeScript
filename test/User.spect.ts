@@ -8,7 +8,6 @@ import { Image } from "../src/entity/Image";
 describe("Integration test user", () => {
 	let init = false;
 	let access_token: string;
-	let txtNotSpace = 'Space not accept!';
 	let instance: Application;
 	let userId: Number;
 

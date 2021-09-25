@@ -8,7 +8,7 @@ import { errorHandler } from './middleware/error.middleware';
 import { notFoundHandler } from './middleware/not-found.middleware';
 import { UserRoutes } from './Routers/User';
 import { headerConfig } from './middleware/headers';
-import { ImageRouter } from './Services/ImageRouter';
+import { ImageRouter } from './Routers/ImageRouter';
 
 export class Application {
 	app: express.Express;
