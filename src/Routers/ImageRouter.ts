@@ -93,7 +93,7 @@ export class ImageRouter extends ImageCtl {
 	}
 
 	deleteRouter(): void {
-		this.ImageRouter.get("/file/delete/:idUser", Token.checkToken,
+		this.ImageRouter.delete("/file/delete/:idUser", Token.checkToken,
 			param('idUser').isNumeric().withMessage('Need /file/delete/:idUser'),
 			async (req: Request, res: Response) => {
 				try {
