@@ -23,7 +23,15 @@ interface IUser {
 	phone?: number;
 }
 
-export class UserService {
+interface IUserService {
+	authUserService({ username, password }: IUserAuth): Promise<string>;
+	readUsersService(): Promise<Users[]>;
+	createUserService({ username, password, name, email, address, phone }: IUser): Promise<Object>;
+	updateUserService(id: number, userData: IUser): Promise<number>;
+	deleteUserService(id: number): Promise<number>;
+}
+
+export class UserService implements IUserService{
 	
 	async authUserService({ username, password }: IUserAuth): Promise<string> {
 		const connection = getConnectionManager().get("default");

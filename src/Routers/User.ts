@@ -3,11 +3,19 @@
 * By M4rc0nd35 
 */
 import express, { Router } from "express";
-import { body, param } from 'express-validator';
+import { body, param, ValidationError } from 'express-validator';
 import { UserControlle } from '../Controllers/User';
 import Token from '../middleware/Token';
 
-export class UserRoutes {
+interface IUserRoutes {
+	authUserRoute(): void;
+	readUserRoute(): void;
+	createUserRoute(): void;
+	updateUserRoute(): void;
+	deleteUserRoute(): void;
+}
+
+export class UserRoutes implements IUserRoutes {
 	userRouter: express.Router;
 	txtNotSpace: string;
 	userController: UserControlle;
@@ -20,11 +28,15 @@ export class UserRoutes {
 	}
 
 	authUserRoute(): void {
-		this.userRouter.post("/user/auth",
-			body('username').isLength({ min: 6, max: 10 }).withMessage('6~10 Digit´s'),
-			body('password').isLength({ min: 6, max: 10 }).withMessage('6~10 Digit´s'),
-			this.userController.authUserCtl
-		);
+		try {
+			this.userRouter.post("/user/auth",
+				body('username').isLength({ min: 6, max: 10 }).withMessage('6~10 Digit´s'),
+				body('password').isLength({ min: 6, max: 10 }).withMessage('6~10 Digit´s'),
+				this.userController.authUserCtl
+			);
+		} catch (error) {
+			console.log('error')
+		}
 	}
 
 	readUserRoute(): void {

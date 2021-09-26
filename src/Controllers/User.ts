@@ -2,6 +2,7 @@
 * Created 2021-05-13
 * By M4rc0nd35 
 */
+
 import { Request, Response } from "express";
 import { validationResult } from 'express-validator';
 import { UserService } from '../Services/User';
@@ -55,7 +56,6 @@ export class UserControlle implements IFuncUser {
 			const user = await new UserService().createUserService(req.body);
 
 			res.status(202).send({ message: "Register success!", user });
-
 		} catch (e) { /* exception */
 			res.status(406).send({ message: (e as Error).message });
 		}
@@ -72,7 +72,6 @@ export class UserControlle implements IFuncUser {
 			const affected = await new UserService().updateUserService(Number(req.params.idUser), req.body)
 
 			res.status(202).send({ message: "Update success!", affected });
-
 		} catch (e) {
 			res.status(406).send({ message: (e as Error).message });
 		}
@@ -88,7 +87,6 @@ export class UserControlle implements IFuncUser {
 			/* Controller */
 			const affected = await new UserService().deleteUserService(Number(req.params.idUser));
 			res.status(202).send({ message: "Delete success!", affected });
-
 		} catch (e) {
 			res.status(406).send({ message: (e as Error).message });
 		}
