@@ -2,8 +2,8 @@
 * Created 2021-05-13
 * By M4rc0nd35 
 */
-import express, { Router } from "express";
-import { body, param, ValidationError } from 'express-validator';
+import { Router } from "express";
+import { body, param } from 'express-validator';
 import { UserControlle } from '../Controllers/User';
 import Token from '../middleware/Token';
 
@@ -16,7 +16,7 @@ interface IUserRoutes {
 }
 
 export class UserRoutes implements IUserRoutes {
-	userRouter: express.Router;
+	userRouter: Router;
 	txtNotSpace: string;
 	userController: UserControlle;
 

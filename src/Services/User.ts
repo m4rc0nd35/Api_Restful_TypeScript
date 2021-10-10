@@ -55,7 +55,7 @@ export class UserService implements IUserService{
 			email: userFind.email
 		},
 			String(process.env.SECRET_KEY), {
-			expiresIn: 60000
+			expiresIn: 6000
 		});
 	}
 

@@ -2,8 +2,8 @@
 * Created 2021-05-13 
 * By M4rc0nd35 
 */
-import http from 'http';
-import express from 'express';
+import http, { Server } from 'http';
+import express, { Express } from 'express';
 import { errorHandler } from './middleware/error.middleware';
 import { notFoundHandler } from './middleware/not-found.middleware';
 import { UserRoutes } from './Routers/User';
@@ -11,8 +11,8 @@ import { headerConfig } from './middleware/headers';
 import { ImageRouter } from './Routers/ImageRouter';
 
 export class Application {
-	app: express.Express;
-	server: http.Server;
+	app: Express;
+	server: Server;
 	image: ImageRouter;
 	user: UserRoutes;
 
@@ -27,7 +27,7 @@ export class Application {
 		this.header();
 		this.app.use(headerConfig);
 		this.routes();
-		this.middlewares();		
+		this.middlewares();
 
 		// Routers init
 		this.user.authUserRoute();
